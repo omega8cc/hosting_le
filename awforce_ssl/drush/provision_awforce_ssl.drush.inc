@@ -1,5 +1,9 @@
 <?php
 
+function drush_provision_awforce_ssl_post_provision_install() {
+  drush_provision_awforce_ssl_post_provision_verify();
+}
+
 // We put the generation here because it will be executed as the aegir user
 function drush_provision_awforce_ssl_post_provision_verify() {
   if (d()->type == 'site' && d()->ssl_enabled) {
@@ -88,5 +92,8 @@ function drush_provision_awforce_ssl_post_provision_verify() {
     else {
       drush_log('[provision_awforce_ssl] Could not replace one or more symlinks. Check ' . $certdir, 'warning');
     }
+
+    drush_log('[provision_awforce_ssl] Running sudo /etc/init.d/nginx reload to restart web server');
+    shell_exec('sudo /etc/init.d/nginx reload');
   }
 }

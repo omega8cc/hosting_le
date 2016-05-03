@@ -5,6 +5,11 @@ This module replaces self-generated Aegir certificates with Let's Encrypt ones.
 
 Developped for Advisor Websites. Use at your own risk.
 
+Requirements
+============
+
+This module only works with nginx\_ssl. You must have the letsencrypt.sh library (see Usage).
+
 Usage
 =====
 
