@@ -25,7 +25,8 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log('[provision_hosting_le] Generating LE certificates for ' . $sitename);
 
       $output = '';
-      exec("/bin/bash " . $aegir_root . "/tools/le/letsencrypt.sh -c -d " . $sitename, $output);
+      $wwwname = "www." . $sitename;
+      exec("/bin/bash " . $aegir_root . "/tools/le/letsencrypt.sh -c -d " . $sitename . " " . $wwwname, $output);
 
       drush_log('[provision_hosting_le] Output: ' . implode(' ', $output));
       // Should now exist
