@@ -1,4 +1,0 @@
-name = AWForce SSL
-description = Custom Let's Encrypt module that generates SSL certificates on Verify
-core = 7.x
-package = Advisor Websites

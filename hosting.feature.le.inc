@@ -10,12 +10,12 @@
  * @return array
  *   associative array indexed by feature key.
  */
-function awforce_ssl_hosting_feature() {
-  $features['awforce_ssl'] = array(
-    'title' => t('AWForce SSL'),
+function hosting_le_hosting_feature() {
+  $features['hosting_le'] = array(
+    'title' => t('Hosting LE SSL'),
     'description' => t("Replaces self-signed certificates with Let's Encrypt ones."),
     'status' => HOSTING_FEATURE_DISABLED,
-    'module' => 'awforce_ssl',
+    'module' => 'hosting_le',
     'group' => 'experimental',
   );
   return $features;
