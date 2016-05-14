@@ -26,7 +26,7 @@ function drush_provision_hosting_le_post_provision_verify() {
 
       $output = '';
       $wwwname = "www." . $sitename;
-      exec("/bin/bash " . $aegir_root . "/tools/le/letsencrypt.sh -c -d " . $sitename . " " . $wwwname, $output);
+      exec("/bin/bash " . $aegir_root . "/tools/le/letsencrypt.sh -c -d " . $sitename . " -d " . $wwwname, $output);
 
       drush_log('[provision_hosting_le] Output: ' . implode(' ', $output));
       // Should now exist
