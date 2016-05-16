@@ -26,7 +26,7 @@ Note that this module will regenerate existing symlinks and existing Let's Encry
 
 Likewise, you can simply put your private certificate in [aegir_root]/tools/le/certs/example.com, though you should know Aegir expects openssl.key and openssl.crt (or a symlink with these filenames) to exist, and this module will generate them for you.
 
-To renew or update the Let's Encrypt certificate, with all aliases added as Alternate (SAN) Names, it is enough to run the Verify task on the site. It's planned to automate this procedure using different methods.
+To renew or update the Let's Encrypt certificate, with all aliases added as Subject Alternative Names (SAN), it is enough to run the Verify task on the site. It's planned to automate this procedure using different methods.
 
 To know more about letsencrypt.sh usage, go to https://github.com/lukas2511/letsencrypt.sh
 
