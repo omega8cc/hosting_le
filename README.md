@@ -3,7 +3,7 @@ Summary
 
 This module replaces self-generated Aegir certificates with Let's Encrypt ones.
 
-Initial version developed by \@gboudrias for Advisor Websites. Improved later for BOA by \@omega8cc -- Use at your own risk.
+Initial version developed by @gboudrias for Advisor Websites. Improved later for BOA by @omega8cc -- Use at your own risk.
 
 Requirements
 ============
