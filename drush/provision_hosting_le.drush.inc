@@ -30,8 +30,8 @@ function drush_provision_hosting_le_post_provision_verify() {
     drush_log('[provision_hosting_le] sitename is ' . $sitename);
 
     if (preg_match("/\.(?:host8|boa)\.(?:biz|io)$/", $sitename) ||
-        preg_match("/\.(?:dev|devel|temp|tmp|temporary)\./", $sitename)) ||
-        preg_match("/\.(?:test|testing|stage|staging)\./", $sitename)) ||
+        preg_match("/\.(?:dev|devel|temp|tmp|temporary)\./", $sitename) ||
+        preg_match("/\.(?:test|testing|stage|staging)\./", $sitename) ||
         $sitename == 'hostmaster') {
       drush_log('[provision_hosting_le] Skipping LE setup for ' . $sitename);
       return FALSE;
