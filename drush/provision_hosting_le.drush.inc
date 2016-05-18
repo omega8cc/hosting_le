@@ -6,13 +6,57 @@ function drush_provision_hosting_le_post_provision_install() {
 
 // We put the generation here because it will be executed as the aegir user
 function drush_provision_hosting_le_post_provision_verify() {
-  if (d()->type == 'site' && d()->ssl_enabled) {
 
+  if (d()->type == 'site') {
     $le_root = d('@server_master')->aegir_root . "/tools/le";
     $le_cert = d('@server_master')->aegir_root . "/tools/le/certs";
     $le_acme = d('@server_master')->aegir_root . "/tools/le/.acme-challenges";
     $le_ctrl = d('@server_master')->aegir_root . "/tools/le/.ctrl";
     $le_exec = d('@server_master')->aegir_root . "/tools/le/letsencrypt.sh";
+
+    $sitename = substr(d()->name, 1);
+    drush_log('[provision_hosting_le] This sitename is ' . $sitename);
+
+    $cert_dir = $le_cert . "/" . $sitename;
+    drush_log('[provision_hosting_le] This cert_dir is ' . $cert_dir);
+
+    $immutable = $le_ctrl . "/dont-overwrite-" . $sitename;
+    drush_log('[provision_hosting_le] The optional immutable flag is ' . $immutable);
+
+    $no_san_ctrl = d('@server_master')->aegir_root . "/static/ssl/no-san-" . $sitename;
+    drush_log('[provision_hosting_le] The optional no-SAN flag is ' . $no_san_ctrl);
+  }
+
+  if (d()->type == 'site' &&
+     !d()->ssl_enabled &&
+     !provision_file()->exists($immutable)->status()) {
+    $sitename = substr(d()->name, 1);
+    $cert_dir = $le_cert . "/" . $sitename;
+    if (file_exists($cert_dir . '/cert.pem')) {
+      $output = '';
+      if (provision_file()->exists($le_exec)->status()) {
+        exec("/bin/bash " . $le_exec . " -r " . $cert_dir . '/cert.pem', $output_a);
+        $acme_result_a = implode(' ', $output_a);
+        drush_log('[provision_hosting_le] ACME Revoke Output: ' . $acme_result_a);
+      }
+    }
+    exec("/bin/bash " . $le_exec . " -gc", $output_b);
+    $acme_result_b = implode(' ', $output_b);
+    drush_log('[provision_hosting_le] ACME Cleanup Output: ' . $acme_result_b);
+
+    exec("symlinks -dr " . $cert_dir, $output_c);
+    $acme_result_c = implode(' ', $output_c);
+    drush_log('[provision_hosting_le] ACME Cleanup Symlinks: ' . $acme_result_c);
+
+    exec("rm -f " . $cert_dir . '/*', $output_d);
+    $acme_result_d = implode(' ', $output_d);
+    drush_log('[provision_hosting_le] ACME Cleanup Files: ' . $acme_result_d);
+
+    exec("rm -rf " . $cert_dir, $output_e);
+    $acme_result_e = implode(' ', $output_e);
+    drush_log('[provision_hosting_le] ACME Cleanup Directory: ' . $acme_result_e);
+  }
+  elseif (d()->type == 'site' && d()->ssl_enabled) {
 
     provision_file()->create_dir($le_root, dt('[provision_hosting_le] LE root'), 0711);
     provision_file()->create_dir($le_cert, dt('[provision_hosting_le] LE certs'), 0700);
@@ -25,10 +69,6 @@ function drush_provision_hosting_le_post_provision_verify() {
       return FALSE;
     }
 
-    // Filter out the '@'
-    $sitename = substr(d()->name, 1);
-    drush_log('[provision_hosting_le] sitename is ' . $sitename);
-
     if (preg_match("/\.(?:host8|boa)\.(?:biz|io)$/", $sitename) ||
         preg_match("/\.(?:dev|devel|temp|tmp|temporary)\./", $sitename) ||
         preg_match("/\.(?:test|testing|stage|staging)\./", $sitename) ||
@@ -37,15 +77,39 @@ function drush_provision_hosting_le_post_provision_verify() {
       return FALSE;
     }
 
-    $cert_dir = $le_cert . "/" . $sitename;
-    drush_log('[provision_hosting_le] This cert_dir is ' . $cert_dir);
-
-    $immutable = $le_ctrl . "/dont-overwrite-" . $sitename;
-    drush_log('[provision_hosting_le] The optional immutable flag is ' . $immutable);
-
-    $alt_names = implode(' -d ', str_replace('/', '.', d()->aliases));
     drush_log('[provision_hosting_le] LE certificate for ' . $sitename);
-    drush_log('[provision_hosting_le] ALT names: -d ' . $alt_names);
+
+    if (provision_file()->exists($no_san_ctrl)->status()) {
+      $no_alt_names = TRUE;
+      drush_log('[provision_hosting_le] SSL no-SAN mode ctrl file detected for ' . $sitename);
+    }
+    else {
+      $no_alt_names = FALSE;
+      $alt_names = implode(' -d ', str_replace('/', '.', d()->aliases));
+      drush_log('[provision_hosting_le] ALT names: -d ' . $alt_names);
+    }
+
+    $site_vhost = d('@server_master')->aegir_root . "/config/server_master/nginx/vhost.d/" . $sitename;
+
+    if (provision_file()->exists($site_vhost)->status()) {
+      $grep_output = '';
+      $redirect_result = '';
+      exec("/bin/grep  \"alias redirection virtual host\" " . $site_vhost, $grep_output);
+      $redirect_result = implode(' ', $grep_output);
+      drush_log('[provision_hosting_le] Redirect check result for ' . $sitename . ' : ' . $redirect_result);
+
+      if ($redirect_result && !$no_alt_names) {
+        drush_log("[provision_hosting_le] Aliases redirection must be disabled if all aliases are expected to be listed as SAN names.", 'warning');
+        drush_log("[provision_hosting_le] The alternative is to disable SAN mode for this site with empty ctrl file: " . $no_san_ctrl, 'warning');
+        drush_log('[provision_hosting_le] Forcing no-SAN-mode for ' . $sitename);
+        $no_alt_names = TRUE;
+      }
+    }
+    else {
+      drush_log("[provision_hosting_le] The site's vhost must already exist, or the LE agent will not be able to proceed.", 'warning');
+      drush_log('[provision_hosting_le] Skipping LE setup for ' . $sitename);
+      return FALSE;
+    }
 
     if (provision_file()->exists($immutable)->status() &&
         provision_file()->exists($cert_dir)->status()) {
@@ -61,7 +125,12 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log("[provision_hosting_le] You could then replace existing cert with any other cert since it will be left here as-is forever.", 'info');
       drush_log("[provision_hosting_le] NOTE: On hosted Aegir service you need to contact your host support for further assistance.", 'info');
       $output = '';
-      exec("/bin/bash " . $le_exec . " -c -d " . $sitename . " -d " . $alt_names, $output);
+      if ($no_alt_names) {
+        exec("/bin/bash " . $le_exec . " -c -d " . $sitename, $output);
+      }
+      else {
+        exec("/bin/bash " . $le_exec . " -c -d " . $sitename . " -d " . $alt_names, $output);
+      }
       $acme_result = implode(' ', $output);
       drush_log('[provision_hosting_le] ACME Output: ' . $acme_result);
       if (!provision_file()->exists($cert_dir)->status()) {
@@ -72,18 +141,34 @@ function drush_provision_hosting_le_post_provision_verify() {
         if (preg_match("/unchanged.*Skipping/i", $acme_result)) {
           drush_log("[provision_hosting_le] The existing LE Certificate is up to date in " . $cert_dir, 'success');
         }
-        elseif (preg_match("/Forcing.*renew/i", $acme_result) && preg_match("/Creating.*fullchain/i", $acme_result)) {
+        elseif (preg_match("/Forcing.*renew/i", $acme_result) &&
+                preg_match("/Creating.*fullchain/i", $acme_result)) {
           drush_log("[provision_hosting_le] The LE Certificate has been successfully updated in " . $cert_dir, 'success');
         }
-        elseif (preg_match("/Forcing.*renew/i", $acme_result) && !preg_match("/Creating.*fullchain/i", $acme_result)) {
+        elseif (preg_match("/Forcing.*renew/i", $acme_result) &&
+               !preg_match("/Creating.*fullchain/i", $acme_result)) {
           drush_log("[provision_hosting_le] The LE Certificate attempted update looks incomplete in " . $cert_dir, 'warning');
           drush_log("[provision_hosting_le] Make sure that all aliases have valid DNS names pointing to your instance IP address.", 'warning');
+          drush_log("[provision_hosting_le] Aliases redirection must be disabled, or the LE agent will not be able to proceed.", 'warning');
+          drush_log("[provision_hosting_le] The alternative is to disable SAN mode for this site with empty ctrl file: " . $no_san_ctrl, 'warning');
+        }
+        elseif (preg_match("/Requesting.*challenge/i", $acme_result) &&
+               !preg_match("/Forcing.*renew/i", $acme_result) &&
+               !preg_match("/Creating.*fullchain/i", $acme_result)) {
+          drush_log("[provision_hosting_le] The LE Certificate attempted creation failed in " . $cert_dir, 'warning');
+          drush_log("[provision_hosting_le] Make sure that all aliases have valid DNS names pointing to your instance IP address.", 'warning');
+          drush_log("[provision_hosting_le] Aliases redirection must be disabled, or the LE agent will not be able to proceed.", 'warning');
+          drush_log("[provision_hosting_le] The alternative is to disable SAN mode for this site with empty ctrl file: " . $no_san_ctrl, 'warning');
         }
         else {
           drush_log("[provision_hosting_le] The LE Certificate has been successfully [re]generated in " . $cert_dir, 'success');
         }
       }
     }
+
+    // exec("/bin/bash " . $le_exec . " -gc", $output_b);
+    // $acme_result_b = implode(' ', $output_b);
+    // drush_log('[provision_hosting_le] ACME Cleanup Output: ' . $acme_result_b);
 
     $ssl_symlinks[] = d('@server_master')->aegir_root . "/config/ssl.d/" . $sitename;
     $ssl_symlinks[] = d('@server_master')->aegir_root . "/config/server_master/ssl.d/" . $sitename;
