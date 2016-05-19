@@ -26,12 +26,9 @@ This module uses [letsencrypt.sh](https://github.com/lukas2511/letsencrypt.sh) a
 Let's Encrypt API limits
 ========================
 
-Please note that Let's Encrypt API for live, real certificates has its own requirements you should be aware of:
+Let's Encrypt API for live, real certificates has its own requirements and limits you should be aware of.
 
-* Rate limit on registrations per IP is currently 10 per 3 hours
-* Rate limit on certificates per Domain is currently 5 per 7 days
-
-Note that "per Domain" means that you can create up to 5 certs for sites like `foo.bar`, `sub1.foo.bar`, `sub2.foo.bar`, `hub.sub3.foo.bar`, `hub2.sub3.foo.bar` -- the Domain here is `foo.bar`
+Please visit [Let's Encrypt website](https://community.letsencrypt.org/t/rate-limits-for-lets-encrypt/6769) for details.
 
 Demo mode
 =========
