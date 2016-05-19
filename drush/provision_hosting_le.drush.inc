@@ -109,7 +109,7 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log('[provision_hosting_le] ALT names: -d ' . $alt_names);
     }
 
-    $site_vhost = d('@server_master')->aegir_root . "/config/server_master/nginx/vhost.d/" . $sitename;
+    $site_vhost = d('@server_master')->http_vhostd_path . "/" . $sitename;
 
     if (provision_file()->exists($site_vhost)->status()) {
       $grep_output = '';
@@ -127,6 +127,7 @@ function drush_provision_hosting_le_post_provision_verify() {
     }
     else {
       drush_log("[provision_hosting_le] The site's vhost must already exist, or the LE agent will not be able to proceed.", 'warning');
+      drush_log('[provision_hosting_le] Path to vhost: ' . $site_vhost);
       drush_log('[provision_hosting_le] Skipping LE setup for ' . $sitename);
       return FALSE;
     }
@@ -272,8 +273,9 @@ function drush_provision_hosting_le_post_provision_verify() {
         }
       }
 
-      drush_log('[provision_hosting_le] Running nginx service graceful reload');
-      shell_exec('sudo /etc/init.d/nginx reload');
+      $http_reload = d('@server_master')->http_restart_cmd;
+      drush_log('[provision_hosting_le] Running ' . $http_reload);
+      shell_exec($http_reload);
     }
   }
 }
