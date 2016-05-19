@@ -31,7 +31,7 @@ Please note that Let's Encrypt API for live, real certificates has its own requi
 * Rate limit on registrations per IP is currently 10 per 3 hours
 * Rate limit on certificates per Domain is currently 5 per 7 days
 
-Note that "per Domain" means that you can create up to 5 certs for sites like foo.bar, sub1.foo.bar, sub2.foo.bar, hub.sub3.foo.bar, hub2.sub3.foo.bar -- the Domain here is foo.bar
+Note that "per Domain" means that you can create up to 5 certs for sites like `foo.bar`, `sub1.foo.bar`, `sub2.foo.bar`, `hub.sub3.foo.bar`, `hub2.sub3.foo.bar` -- the Domain here is `foo.bar`
 
 Demo mode
 =========
