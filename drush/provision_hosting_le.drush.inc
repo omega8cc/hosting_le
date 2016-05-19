@@ -114,7 +114,15 @@ function drush_provision_hosting_le_post_provision_verify() {
     if (provision_file()->exists($site_vhost)->status()) {
       $grep_output = '';
       $redirect_result = '';
-      exec("/bin/grep  \"alias redirection virtual host\" " . $site_vhost, $grep_output);
+      $http_service_type = d('@server_master')->http_service_type;
+
+      if ($http_service_type == 'nginx_ssl') {
+        exec("/bin/grep  \"alias redirection virtual host\" " . $site_vhost, $grep_output);
+      }
+      elseif ($http_service_type == 'apache_ssl') {
+        exec("/bin/grep  \"Redirect all aliases\" " . $site_vhost, $grep_output);
+      }
+
       $redirect_result = implode(' ', $grep_output);
       drush_log('[provision_hosting_le] Redirect check result for ' . $sitename . ' : ' . $redirect_result);
 
