@@ -1,7 +1,6 @@
 name = Hosting LE SSL
 description = Custom Let's Encrypt module that generates SSL certificates on Verify
 package = Hosting
+dependencies[] = hosting_web_server
 dependencies[] = hosting_ssl
-dependencies[] = hosting_nginx
-dependencies[] = hosting_nginx_ssl
 core = 7.x

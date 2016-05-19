@@ -8,7 +8,7 @@ Initial version developed by @gboudrias for Advisor Websites. Improved later for
 Requirements
 ============
 
-This module currently works only with nginx\_ssl. You must have the third-party letsencrypt.sh library uploaded (see Usage).
+This module works with Apache and Nginx. You must have the third-party letsencrypt.sh library uploaded (see Usage).
 
 Usage
 =====
