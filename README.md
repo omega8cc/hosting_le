@@ -69,7 +69,7 @@ To know more about `letsencrypt.sh` usage, please visit: https://github.com/luka
 General Notes
 =============
 
-The main important file here is `drush/provision\_hosting\_le.drush.inc` , which allows us to run code after the verify as the Aegir user. The `www-data` group must not be granted access to `letsencrypt.sh` and its base directory `[aegir_root]/tools/le/` for security reasons.
+The main important file here is `drush/provision_hosting_le.drush.inc` , which allows us to run code after the verify as the Aegir user. The `www-data` group must not be granted access to `letsencrypt.sh` and its base directory `[aegir_root]/tools/le/` for security reasons.
 
 The file `hosting.feature.le.inc` must be present for Aegir to load the Provision (Drush) extension, and will do so only if the module is enabled.
 
