@@ -41,7 +41,7 @@ You could switch it back and forth to demo/live mode by adding and deleting the 
 
 This module will create all required directories it needs to operate on the first attempt to run site Verify task with SSL option enabled, but you may want to create at least `[aegir_root]/tools/le/.ctrl/` before running it for the first time, so the demo mode will be active on the first attempt.
 
-Read the task log lines which start with `[provision_hosting_le]` prefix for more information.
+Read the task log lines which start with `[hosting_le]` prefix for more information.
 
 Exceptions
 ==========

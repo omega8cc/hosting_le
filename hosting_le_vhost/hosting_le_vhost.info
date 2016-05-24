@@ -1,0 +1,6 @@
+name = Hosting LE Vhost
+description = Extends vhosts with ACME challenge paths for Let's Encrypt
+package = Hosting
+dependencies[] = hosting_ssl
+dependencies[] = hosting_le
+core = 7.x
