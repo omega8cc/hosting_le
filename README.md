@@ -37,9 +37,13 @@ It is recommended to test this module in Let's Encrypt demo mode, so it will not
 
 To switch the mode to live, simply delete `[aegir_root]/tools/le/.ctrl/ssl-demo-mode.pid` and run Verify task on the SSL enabled site again.
 
-You could switch it back and forth to demo/live mode by adding and deleting the control file, and it will re-register your system via Let's Encrypt API, but we have not tested how it may affect already generated live certificates.
+You could switch it back and forth to demo/live mode by adding and deleting the control file, and it will re-register your system via Let's Encrypt API, but we have not tested how it may affect already generated live certificates once you will run the switch many times, so please try not to abuse this feature.
 
-This module will create all required directories it needs to operate on the first attempt to run site Verify task with SSL option enabled, but you may want to create at least `[aegir_root]/tools/le/.ctrl/` before running it for the first time, so the demo mode will be active on the first attempt.
+It is important to remember that once you will switch the Let's Encrypt mode to demo from live, or from live to demo, by adding or removing the `[aegir_root]/tools/le/.ctrl/ssl-demo-mode.pid` control file, it will not replace all previously issued certificates instantly, because certificates are updated, if needed, only when you (or the BOA system for you during its daily maintenance, if used) will run Verify tasks on SSL enabled sites.
+
+These BOA specific Verify tasks are normally scheduled to run weekly, between Monday and Sunday, depending on the first character in the site's main name, so both live and demo certificates may still work in parallel for SSL enabled sites until it will be their turn to run Verify and update the certificate according to currently set Let's Encrypt mode.
+
+This module will create all required directories it needs to operate on the first attempt to run site Verify task with SSL option enabled, but you may want to create at least `[aegir_root]/tools/le/.ctrl/` before running it for the first time, so the demo mode will be active on the first attempt. This is default behaviour in BOA, which always starts the integration in demo mode, until the control file is removed (which may require support request when you are on hosted BOA).
 
 Read the task log lines which start with `[hosting_le]` prefix for more information.
 
