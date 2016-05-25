@@ -12,6 +12,7 @@ function drush_provision_hosting_le_post_provision_verify() {
     $le_ctrl = d('@server_master')->aegir_root . "/tools/le/.ctrl";
     $le_exec = d('@server_master')->aegir_root . "/tools/le/letsencrypt.sh";
     $le_conf = d('@server_master')->aegir_root . "/tools/le/config.sh";
+    $le_cnfx = d('@server_master')->aegir_root . "/tools/le/config";
     $le_keyj = d('@server_master')->aegir_root . "/tools/le/private_key.json";
     $le_keyp = d('@server_master')->aegir_root . "/tools/le/private_key.pem";
 
@@ -75,6 +76,8 @@ function drush_provision_hosting_le_post_provision_verify() {
           ->succeed('[hosting_le] Created cnf ' . $le_conf)
           ->fail('[hosting_le] Could not create cnf ' . $le_conf);
 
+        copy($le_conf, $le_cnfx);
+
         if (provision_file()->exists($le_keyp)->status()) {
           drush_log('[hosting_le] Demo LE account will be created.');
           rename($le_keyp, $le_keyp . "-live");
@@ -86,6 +89,7 @@ function drush_provision_hosting_le_post_provision_verify() {
     else {
       if (provision_file()->exists($le_conf)->status()) {
         unlink($le_conf);
+        unlink($le_cnfx);
         if (provision_file()->exists($le_keyp)->status()) {
           rename($le_keyp, $le_keyp . "-demo");
           rename($le_keyj, $le_keyj . "-demo");
