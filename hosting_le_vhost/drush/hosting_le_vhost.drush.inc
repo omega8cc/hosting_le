@@ -41,7 +41,7 @@ function hosting_le_vhost_provision_nginx_vhost_config($uri, $data) {
 
   $aegir_root = d('@server_master')->aegir_root;
 
-  if (d()->type == 'site' && d()->ssl_enabled) {
+  if (d()->type == 'site') {
 
     $lines = array();
 
@@ -68,7 +68,7 @@ function hosting_le_vhost_provision_apache_vhost_config($uri, $data) {
 
   $aegir_root = d('@server_master')->aegir_root;
 
-  if (d()->type == 'site' && d()->ssl_enabled) {
+  if (d()->type == 'site') {
 
     $lines = array();
 
