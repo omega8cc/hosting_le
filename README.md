@@ -8,12 +8,12 @@ Initial version developed by `@gboudrias` for Advisor Websites. Improved by `@om
 Requirements
 ============
 
-This module works with Apache and Nginx. You must have the third-party `letsencrypt.sh` library uploaded (see Usage).
+This module works with Apache and Nginx. You must have the third-party `letsencrypt.sh v0.2.0` library uploaded (see Usage).
 
 Usage
 =====
 
-This module uses [letsencrypt.sh](https://github.com/lukas2511/letsencrypt.sh) and automates almost everything:
+This module uses [letsencrypt.sh v0.2.0](https://github.com/lukas2511/letsencrypt.sh) and automates almost everything:
 
 * Aegir and its config may live in any non-standard directory or in the canonical `/var/aegir`
 * The certificate's name in Aegir (and thus its directory) is the same as the site's name

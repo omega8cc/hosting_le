@@ -55,7 +55,7 @@ function drush_provision_hosting_le_post_provision_verify() {
 
     if (!provision_file()->exists($le_exec)->status()) {
       drush_log('[hosting_le] Please upload letsencrypt.sh to ' . $le_exec, 'warning');
-      drush_log('[hosting_le] URL: https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/master/letsencrypt.sh', 'warning');
+      drush_log('[hosting_le] URL: https://raw.githubusercontent.com/lukas2511/letsencrypt.sh/v0.2.0/letsencrypt.sh', 'warning');
       return FALSE;
     }
 
