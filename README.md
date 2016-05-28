@@ -18,10 +18,13 @@ This module uses [letsencrypt.sh v0.2.0](https://github.com/lukas2511/letsencryp
 * Aegir and its config may live in any non-standard directory or in the canonical `/var/aegir`
 * The certificate's name in Aegir (and thus its directory) is the same as the site's name
 * Your `letsencrypt.sh` can be found at `[aegir_root]/tools/le/letsencrypt.sh`
-* All site's aliases must have valid DNS names pointing to your server IP address
+* All site's aliases must have valid DNS names pointing to your server IP address,
+  unless redirection is used, and the target has a valid DNS name
 * Aliases redirection must be disabled if all aliases are expected to be included as SAN names
-* If aliases redirection is enabled, the certificate created will list only the main site name
-* This module will ignore Hostmaster site and all sites with special keywords in their names
+* If aliases redirection is enabled, the certificate created will list only the redirection target name
+* If the site will be renamed, new certificate will be generated on the fly
+* This module will ignore Hostmaster site and all sites with special keywords in their names,
+  or in their redirection target, if used
 
 Let's Encrypt API limits
 ========================
