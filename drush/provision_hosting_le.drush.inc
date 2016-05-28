@@ -218,7 +218,11 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log('[hosting_le] ACME Output: ' . $acme_result);
       if (!provision_file()->exists($cert_dir)->status()) {
         $needs_update = FALSE;
-        drush_log("[hosting_le] Error: The LE Certificate was not generated. This is probably a permissions issue.", 'error');
+        drush_log("[hosting_le] Hmm.. For some reason cert_dir doesn't exist:  " . $cert_dir, 'info');
+        drush_log("[hosting_le] I couldn't generate LE cert during this Verify procedure.", 'info');
+        drush_log("[hosting_le] It's normal while running a series of Verify sub-tasks during Rename/Migrate.", 'info');
+        drush_log("[hosting_le] But if this happens during standalone Verify, maybe permissions are incorrect.", 'info');
+        drush_log("[hosting_le] Let's abort the procedure here. Bye.", 'info');
         return FALSE;
       }
       else {
