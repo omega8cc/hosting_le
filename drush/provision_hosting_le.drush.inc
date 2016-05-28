@@ -107,24 +107,24 @@ function drush_provision_hosting_le_post_provision_verify() {
     }
 
     if ($demo_mode) {
-      if ($file_exists($site_mode_live_ctrl)) {
+      if (file_exists($site_mode_live_ctrl)) {
         unlink($site_mode_live_ctrl);
         $force_renew = TRUE;
         drush_log('[hosting_le] Forcing DEMO certificate renew for ' . $sitename);
       }
-      if (!$file_exists($site_mode_demo_ctrl)) {
+      if (!file_exists($site_mode_demo_ctrl)) {
         provision_file()->file_put_contents($site_mode_demo_ctrl, $sitename)
           ->succeed('[hosting_le] Created pid ' . $site_mode_demo_ctrl)
           ->fail('[hosting_le] Could not create pid ' . $site_mode_demo_ctrl);
       }
     }
     else {
-      if ($file_exists($site_mode_demo_ctrl)) {
+      if (file_exists($site_mode_demo_ctrl)) {
         unlink($site_mode_demo_ctrl);
         $force_renew = TRUE;
         drush_log('[hosting_le] Forcing LIVE certificate renew for ' . $sitename);
       }
-      if (!$file_exists($site_mode_live_ctrl)) {
+      if (!file_exists($site_mode_live_ctrl)) {
         provision_file()->file_put_contents($site_mode_live_ctrl, $sitename)
           ->succeed('[hosting_le] Created pid ' . $site_mode_live_ctrl)
           ->fail('[hosting_le] Could not create pid ' . $site_mode_live_ctrl);
