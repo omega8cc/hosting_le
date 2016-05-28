@@ -25,6 +25,8 @@ This module uses [letsencrypt.sh v0.2.0](https://github.com/lukas2511/letsencryp
 * If the site will be renamed, new certificate will be generated on the fly
 * This module will ignore Hostmaster site and all sites with special keywords in their names,
   or in their redirection target, if used
+* Before you rename site, disable SSL first; then re-enable once it's renamed
+* Avoid renaming back and forth any site with SSL enabled before, move aliases between sites instead
 
 Let's Encrypt API limits
 ========================
