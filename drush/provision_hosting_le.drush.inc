@@ -28,8 +28,13 @@ function drush_provision_hosting_le_post_provision_verify() {
     $immutable = $le_ctrl . "/dont-overwrite-" . $sitename . ".pid";
     drush_log('[hosting_le] The optional immutable flag is ' . $immutable);
 
-    $demo_mode = $le_ctrl . "/ssl-demo-mode.pid";
-    drush_log('[hosting_le] The optional demo flag is ' . $demo_mode);
+    $demo_mode_ctrl = $le_ctrl . "/ssl-demo-mode.pid";
+    drush_log('[hosting_le] The optional demo flag is ' . $demo_mode_ctrl);
+
+    $site_mode_demo_ctrl = $le_ctrl . "/demo-" . $sitename . ".pid";
+    $site_mode_live_ctrl = $le_ctrl . "/live-" . $sitename . ".pid";
+
+    $force_renew = FALSE;
   }
 
   if (d()->type == 'site' &&
@@ -67,7 +72,7 @@ function drush_provision_hosting_le_post_provision_verify() {
       return FALSE;
     }
 
-    if (provision_file()->exists($demo_mode)->status()) {
+    if (provision_file()->exists($demo_mode_ctrl)->status()) {
       if (!provision_file()->exists($le_conf)->status()) {
 
         $le_conf_lines = "#!/usr/bin/env bash\n\nCA=\"https://acme-staging.api.letsencrypt.org/directory\"\n";
@@ -85,6 +90,7 @@ function drush_provision_hosting_le_post_provision_verify() {
         }
       }
       drush_log('[hosting_le] Demo LE mode active. No real LE certs will be generated.');
+      $demo_mode = TRUE;
     }
     else {
       if (provision_file()->exists($le_conf)->status()) {
@@ -97,6 +103,30 @@ function drush_provision_hosting_le_post_provision_verify() {
         drush_log('[hosting_le] Live LE account will be registered.');
       }
       drush_log('[hosting_le] Live LE mode active. Real LE certs will be generated.');
+      $demo_mode = FALSE;
+    }
+
+    if ($demo_mode) {
+      if ($file_exists($site_mode_live_ctrl)) {
+        unlink($site_mode_live_ctrl);
+        $force_renew = TRUE;
+      }
+      if (!$file_exists($site_mode_demo_ctrl)) {
+        provision_file()->file_put_contents($site_mode_demo_ctrl, $sitename)
+          ->succeed('[hosting_le] Created pid ' . $site_mode_demo_ctrl)
+          ->fail('[hosting_le] Could not create pid ' . $site_mode_demo_ctrl);
+      }
+    }
+    else {
+      if ($file_exists($site_mode_demo_ctrl)) {
+        unlink($site_mode_demo_ctrl);
+        $force_renew = TRUE;
+      }
+      if (!$file_exists($site_mode_live_ctrl)) {
+        provision_file()->file_put_contents($site_mode_live_ctrl, $sitename)
+          ->succeed('[hosting_le] Created pid ' . $site_mode_live_ctrl)
+          ->fail('[hosting_le] Could not create pid ' . $site_mode_live_ctrl);
+      }
     }
 
     drush_log('[hosting_le] LE certificate for ' . $sitename);
@@ -156,11 +186,21 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log("[hosting_le] You could then replace existing cert with any other cert since it will be left here as-is forever.", 'info');
       drush_log("[hosting_le] NOTE: On hosted Aegir service you need to contact your host support for further assistance.", 'info');
       $output = '';
-      if ($no_alt_names) {
-        exec("/bin/bash " . $le_exec . " -c -d " . $sitename, $output);
+      if ($force_renew) {
+        if ($no_alt_names) {
+          exec("/bin/bash " . $le_exec . " -c -x -d " . $sitename, $output);
+        }
+        else {
+          exec("/bin/bash " . $le_exec . " -c -x -d " . $sitename . " -d " . $alt_names, $output);
+        }
       }
       else {
-        exec("/bin/bash " . $le_exec . " -c -d " . $sitename . " -d " . $alt_names, $output);
+        if ($no_alt_names) {
+          exec("/bin/bash " . $le_exec . " -c -d " . $sitename, $output);
+        }
+        else {
+          exec("/bin/bash " . $le_exec . " -c -d " . $sitename . " -d " . $alt_names, $output);
+        }
       }
       $acme_result = implode(' ', $output);
       drush_log('[hosting_le] ACME Output: ' . $acme_result);
