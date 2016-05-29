@@ -27,13 +27,11 @@ function drush_provision_hosting_le_post_provision_verify() {
 
     if (d()->redirection) {
       drush_log('[hosting_le] This sitename redirection target is ' . d()->redirection);
+      $main_name = d()->redirection;
       if ($is_boa) {
-        $main_name = d()->redirection;
         $cert_dir = $le_cert . "/" . $real_name;
-        drush_log('[hosting_le] This cert_dir is ' . $cert_dir);
       }
       else {
-        $main_name = d()->redirection;
         $cert_dir = $le_cert . "/" . $main_name;
         drush_log('[hosting_le] LE SSL certificate will be valid only for ' . d()->redirection);
       }
@@ -42,6 +40,8 @@ function drush_provision_hosting_le_post_provision_verify() {
       $main_name = substr(d()->name, 1);
       $cert_dir = $le_cert . "/" . $main_name;
     }
+
+    drush_log('[hosting_le] This cert_dir is ' . $cert_dir);
 
     if ($is_boa) {
       drush_log('[hosting_le] This site main SSL name is ' . $real_name);
