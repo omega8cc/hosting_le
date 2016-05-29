@@ -40,6 +40,7 @@ function drush_provision_hosting_le_post_provision_verify() {
     }
     else {
       $main_name = substr(d()->name, 1);
+      $cert_dir = $le_cert . "/" . $main_name;
     }
 
     if ($is_boa) {
