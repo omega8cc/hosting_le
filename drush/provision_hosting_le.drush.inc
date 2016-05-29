@@ -212,7 +212,7 @@ function drush_provision_hosting_le_post_provision_verify() {
           exec("/bin/bash " . $le_exec . " -c -x -d " . $main_name, $output);
         }
         else {
-          exec("/bin/bash " . $le_exec . " -c -x -d " . $main_name . " -d " . $alt_names, $output);
+          exec("/bin/bash " . $le_exec . " -c -x -d " . $real_name . " -d " . $alt_names, $output);
         }
       }
       else {
@@ -220,7 +220,7 @@ function drush_provision_hosting_le_post_provision_verify() {
           exec("/bin/bash " . $le_exec . " -c -d " . $main_name, $output);
         }
         else {
-          exec("/bin/bash " . $le_exec . " -c -d " . $main_name . " -d " . $alt_names, $output);
+          exec("/bin/bash " . $le_exec . " -c -d " . $real_name . " -d " . $alt_names, $output);
         }
       }
       $acme_result = implode(' ', $output);
