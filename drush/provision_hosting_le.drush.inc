@@ -218,7 +218,7 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log("[hosting_le] NOTE: On hosted Aegir service you need to contact your host support for further assistance.", 'info');
       $output = '';
       if ($force_renew) {
-        if ($no_alt_names) {
+        if ($no_alt_names || empty($alt_names)) {
           exec("/bin/bash " . $le_exec . " --cron --force --domain " . $main_name, $output);
         }
         else {
@@ -226,7 +226,7 @@ function drush_provision_hosting_le_post_provision_verify() {
         }
       }
       else {
-        if ($no_alt_names) {
+        if ($no_alt_names || empty($alt_names)) {
           exec("/bin/bash " . $le_exec . " --cron --domain " . $main_name, $output);
         }
         else {
