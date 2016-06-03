@@ -74,7 +74,7 @@ function drush_provision_hosting_le_post_provision_verify() {
       $acme_result_b = implode(' ', $output_b);
       drush_log('[hosting_le] ACME Cleanup Output: ' . $acme_result_b);
 
-      exec("symlinks --domain --revoke " . $cert_dir, $output_c);
+      exec("symlinks -dr " . $cert_dir, $output_c);
       $acme_result_c = implode(' ', $output_c);
       drush_log('[hosting_le] ACME Cleanup Symlinks: ' . $acme_result_c);
     }
