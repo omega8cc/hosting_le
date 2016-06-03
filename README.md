@@ -3,7 +3,7 @@ Summary
 
 This module replaces self-generated Aegir certificates with Let's Encrypt ones.
 
-Initial version developed by `@gboudrias` for Advisor Websites. Improved by `@omega8cc`.
+Initial version developed by `@gboudrias` for Advisor Websites. Improved by `@omega8cc` and `@helmo`.
 
 Requirements
 ============
