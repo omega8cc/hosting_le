@@ -219,18 +219,18 @@ function drush_provision_hosting_le_post_provision_verify() {
       $output = '';
       if ($force_renew) {
         if ($no_alt_names || empty($alt_names)) {
-          exec("/bin/bash " . $le_exec . " --cron --force --domain " . $main_name, $output);
+          exec("/bin/bash " . $le_exec . " --cron --force --domain " . $main_name. ' 2>&1', $output);
         }
         else {
-          exec("/bin/bash " . $le_exec . " --cron --force --domain " . $real_name . " --domain " . $alt_names, $output);
+          exec("/bin/bash " . $le_exec . " --cron --force --domain " . $real_name . " --domain " . $alt_names . ' 2>&1', $output);
         }
       }
       else {
         if ($no_alt_names || empty($alt_names)) {
-          exec("/bin/bash " . $le_exec . " --cron --domain " . $main_name, $output);
+          exec("/bin/bash " . $le_exec . " --cron --domain " . $main_name . ' 2>&1', $output);
         }
         else {
-          exec("/bin/bash " . $le_exec . " --cron --domain " . $real_name . " --domain " . $alt_names, $output);
+          exec("/bin/bash " . $le_exec . " --cron --domain " . $real_name . " --domain " . $alt_names . ' 2>&1', $output);
         }
       }
       $acme_result = implode(' ', $output);
