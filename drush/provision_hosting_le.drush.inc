@@ -23,7 +23,10 @@ function drush_provision_hosting_le_post_provision_verify() {
       $is_boa = TRUE;
     }
 
-    $real_name = substr(d()->name, 1);
+    $main_name = $real_name = substr(d()->name, 1);
+    if ($real_name == 'hostmaster') {
+      $real_name = $main_name = d()->uri;
+    }
 
     if (d()->redirection) {
       drush_log('[hosting_le] This sitename redirection target is ' . d()->redirection);
@@ -37,7 +40,6 @@ function drush_provision_hosting_le_post_provision_verify() {
       }
     }
     else {
-      $main_name = substr(d()->name, 1);
       $cert_dir = $le_cert . "/" . $main_name;
     }
 
@@ -95,8 +97,8 @@ function drush_provision_hosting_le_post_provision_verify() {
 
     if (preg_match("/\.(?:host8|boa)\.(?:biz|io)$/", $main_name) ||
         preg_match("/\.(?:dev|devel|temp|tmp|temporary)\./", $main_name) ||
-        preg_match("/\.(?:test|testing|stage|staging)\./", $main_name) ||
-        $real_name == 'hostmaster') {
+        preg_match("/\.(?:test|testing|stage|staging)\./", $main_name)
+       ) {
       drush_log('[hosting_le] Skipping LE setup for ' . $main_name);
       return FALSE;
     }
@@ -346,7 +348,7 @@ function drush_provision_hosting_le_post_provision_verify() {
 
       $pid = $le_ctrl . "/" . $main_name . ".pid";
 
-      if ($real_name != 'hostmaster' && file_exists($cert_dir) && !file_exists($pid)) {
+      if (file_exists($cert_dir) && !file_exists($pid)) {
         provision_file()->file_put_contents($pid, $main_name)
           ->succeed('[hosting_le] Created pid ' . $pid)
           ->fail('[hosting_le] Could not create pid ' . $pid);
