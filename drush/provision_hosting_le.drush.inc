@@ -172,12 +172,13 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log('[hosting_le] ALT names: --domain ' . $alt_names);
     }
 
-    $site_vhost = d('@server_master')->http_vhostd_path . "/" . $real_name;
+    $web_server = d()->platform->web_server;
+    $site_vhost = $web_server->http_vhostd_path . "/" . $real_name;
 
     if (provision_file()->exists($site_vhost)->status()) {
       $grep_output = '';
       $redirect_result = '';
-      $http_service_type = d('@server_master')->http_service_type;
+      $http_service_type = $web_server->http_service_type;
 
       if ($http_service_type == 'nginx_ssl') {
         exec("/bin/grep  \"alias redirection virtual host\" " . $site_vhost, $grep_output);
@@ -288,8 +289,8 @@ function drush_provision_hosting_le_post_provision_verify() {
       $acme_result_clean = implode(' ', $output_clean);
       drush_log('[hosting_le] ACME Cleanup Output: ' . $acme_result_clean);
 
-      $ssl_symlinks[] = d('@server_master')->aegir_root . "/config/ssl.d/" . $real_name;
-      $ssl_symlinks[] = d('@server_master')->aegir_root . "/config/server_master/ssl.d/" . $real_name;
+      $ssl_symlinks[] = d('@server_master')->http_ssld_path . "/" . $real_name;
+      $ssl_symlinks[] = $web_server->http_ssld_path . "/" . $real_name;
 
       foreach ($ssl_symlinks as $symlink) {
         if (provision_file()->exists($symlink)->status()) {
@@ -362,9 +363,8 @@ function drush_provision_hosting_le_post_provision_verify() {
         }
       }
 
-      $http_reload = d('@server_master')->http_restart_cmd;
-      drush_log('[hosting_le] Running ' . $http_reload);
-      shell_exec($http_reload);
+      drush_log('[hosting_le] Restarting webserver');
+      $web_server->restart();
     }
   }
 }
