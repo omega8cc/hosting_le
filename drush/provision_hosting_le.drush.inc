@@ -166,6 +166,9 @@ function drush_provision_hosting_le_post_provision_verify() {
       }
     }
 
+    // WIP: needed after certs deleted
+    // $force_renew = TRUE;
+
     drush_log('[hosting_le] LE certificate for ' . $main_name);
 
     if (provision_file()->exists($no_san_ctrl)->status()) {
