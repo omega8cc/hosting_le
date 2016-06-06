@@ -149,7 +149,7 @@ function drush_provision_hosting_le_post_provision_verify() {
     }
     else {
       if (file_exists($site_mode_demo_ctrl) || !file_exists($site_mode_live_ctrl)) {
-        unlink($site_mode_demo_ctrl);
+        @unlink($site_mode_demo_ctrl);
         $force_renew = TRUE;
         drush_log('[hosting_le] Forcing LIVE certificate renew for ' . $main_name);
       }
