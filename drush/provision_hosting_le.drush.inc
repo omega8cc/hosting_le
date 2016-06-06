@@ -218,20 +218,21 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log("[hosting_le] You could then replace existing cert with any other cert since it will be left here as-is forever.", 'info');
       drush_log("[hosting_le] NOTE: On hosted Aegir service you need to contact your host support for further assistance.", 'info');
       $output = '';
+      $le_options = '--cron';
       if ($force_renew) {
         if ($no_alt_names || empty($alt_names)) {
-          exec("/bin/bash " . $le_exec . " --cron --force --domain " . $main_name. ' 2>&1', $output);
+          exec("/bin/bash " . $le_exec . " $le_options --force --domain " . $main_name. ' 2>&1', $output);
         }
         else {
-          exec("/bin/bash " . $le_exec . " --cron --force --domain " . $real_name . " --domain " . $alt_names . ' 2>&1', $output);
+          exec("/bin/bash " . $le_exec . " $le_options --force --domain " . $real_name . " --domain " . $alt_names . ' 2>&1', $output);
         }
       }
       else {
         if ($no_alt_names || empty($alt_names)) {
-          exec("/bin/bash " . $le_exec . " --cron --domain " . $main_name . ' 2>&1', $output);
+          exec("/bin/bash " . $le_exec . " $le_options --domain " . $main_name . ' 2>&1', $output);
         }
         else {
-          exec("/bin/bash " . $le_exec . " --cron --domain " . $real_name . " --domain " . $alt_names . ' 2>&1', $output);
+          exec("/bin/bash " . $le_exec . " $le_options --domain " . $real_name . " --domain " . $alt_names . ' 2>&1', $output);
         }
       }
       $acme_result = implode(' ', $output);
