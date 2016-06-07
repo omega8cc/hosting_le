@@ -299,7 +299,7 @@ function drush_provision_hosting_le_post_provision_verify() {
       $acme_result_clean = implode(' ', $output_clean);
       drush_log('[hosting_le] ACME Cleanup Output: ' . $acme_result_clean);
 
-      $ssl_symlinks[] = d('@server_master')->http_ssld_path . "/" . $real_name;
+      $ssl_symlinks[] = d('@server_master')->ssld_path . "/" . $real_name;
       $ssl_symlinks[] = $web_server->http_ssld_path . "/" . $real_name;
 
       foreach ($ssl_symlinks as $symlink) {
