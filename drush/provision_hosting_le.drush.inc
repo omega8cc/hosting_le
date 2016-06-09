@@ -215,6 +215,7 @@ function drush_provision_hosting_le_post_provision_verify() {
 
     if (provision_file()->exists($immutable)->status() &&
         provision_file()->exists($cert_dir)->status()) {
+      $needs_update = FALSE;
       drush_log("[hosting_le] Immutable protection mode detected for this domain: " . $cert_dir, 'info');
       drush_log("[hosting_le] SSL Certificate for this domain already exists in: " . $cert_dir, 'info');
       drush_log("[hosting_le] You can replace it with any other certificate since it will be left here as-is forever.", 'info');
