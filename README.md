@@ -33,7 +33,7 @@ Let's Encrypt API limits
 
 Let's Encrypt API for live, real certificates has its own requirements and limits you should be aware of.
 
-Please visit [Let's Encrypt website](https://community.letsencrypt.org/t/rate-limits-for-lets-encrypt/6769) for details.
+Please visit [Let's Encrypt website](https://letsencrypt.org/docs/rate-limits/) for details.
 
 Demo mode
 =========
