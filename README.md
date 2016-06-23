@@ -23,8 +23,7 @@ This module uses [letsencrypt.sh v0.2.0](https://github.com/lukas2511/letsencryp
 * Aliases redirection must be disabled if all aliases are expected to be included as SAN names
 * If aliases redirection is enabled, the certificate created will list only the redirection target name
 * If the site will be renamed, new certificate will be generated on the fly
-* This module will ignore Hostmaster site and all sites with special keywords in their names,
-  or in their redirection target, if used
+* This module will ignore sites with special keywords in their names, or in their redirection target
 * Before you rename site, disable SSL first; then re-enable once it's renamed
 * Avoid renaming back and forth any site with SSL enabled before, move aliases between sites instead
 
