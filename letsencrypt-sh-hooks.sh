@@ -20,7 +20,7 @@ function deploy_challenge {
     #   TXT record. For HTTP validation it is the value that is expected
     #   be found in the $TOKEN_FILENAME file.
 
-   drush php-eval "d('@$DOMAIN')->service('http')->sync('/var/aegir/tools/le/.acme-challenges');"
+    drush php-eval "d('@$DOMAIN')->service('http')->sync(d('@server_master')->aegir_root . '/tools/le/.acme-challenges');"
 }
 
 function clean_challenge {

@@ -356,7 +356,7 @@ function drush_provision_hosting_le_post_provision_verify() {
         drush_log('[hosting_le] Could not replace one or more symlinks. Check ' . $certdir, 'warning');
       }
 
-      $web_server->sync('/var/aegir/tools/le/certs/' . $real_name);
+      $web_server->sync($le_cert . '/' . $real_name);
       $web_server->sync($web_server->http_ssld_path);
 
       $pid = $le_ctrl . "/" . $main_name . ".pid";
