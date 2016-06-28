@@ -65,6 +65,8 @@ function drush_provision_hosting_le_post_provision_verify() {
     $site_mode_live_ctrl = $le_ctrl . "/live-" . $main_name . ".pid";
 
     $force_renew = FALSE;
+
+    $on_remote_server = !provision_is_local_host(d()->platform->web_server->remote_host);
   }
 
   if (d()->type == 'site' &&
@@ -94,7 +96,7 @@ function drush_provision_hosting_le_post_provision_verify() {
       return FALSE;
     }
 
-    if (!provision_file()->exists($le_hook)->status()) {
+    if ($on_remote_server && !provision_file()->exists($le_hook)->status()) {
       drush_log('[hosting_le] Please copy letsencrypt-sh-hooks.sh to ' . $le_root, 'warning');
       return FALSE;
     }
@@ -228,7 +230,10 @@ function drush_provision_hosting_le_post_provision_verify() {
       drush_log("[hosting_le] You could then replace existing cert with any other cert since it will be left here as-is forever.", 'info');
       drush_log("[hosting_le] NOTE: On hosted Aegir service you need to contact your host support for further assistance.", 'info');
       $output = '';
-      $le_options = '--cron --hook ' . $le_hook;
+      $le_options = '--cron';
+      if ($on_remote_server) {
+        $le_options .= ' --hook ' . $le_hook;
+      }
       if ($force_renew) {
         if ($no_alt_names || empty($alt_names)) {
           exec("/bin/bash " . $le_exec . " $le_options --force --domain " . $main_name. ' 2>&1', $output);
