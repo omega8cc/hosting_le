@@ -103,14 +103,6 @@ function drush_provision_hosting_le_post_provision_verify() {
       return FALSE;
     }
 
-    if (preg_match("/\.(?:host8|boa)\.(?:biz|io)$/", $main_name) ||
-        preg_match("/\.(?:dev|devel|temp|tmp|temporary)\./", $main_name) ||
-        preg_match("/\.(?:test|testing|stage|staging)\./", $main_name)
-       ) {
-      drush_log('[hosting_le] Skipping LE setup for ' . $main_name);
-      return FALSE;
-    }
-
     if (provision_file()->exists($demo_mode_ctrl)->status()) {
       if (!provision_file()->exists($le_conf)->status()) {
 
