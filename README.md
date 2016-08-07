@@ -15,16 +15,17 @@ You must have the third-party `letsencrypt.sh` library uploaded (see Usage).
 Usage
 =====
 
-This module depends on the [forked letsencrypt.sh version](https://github.com/omega8cc/letsencrypt.sh)
+This module depends on the [forked letsencrypt.sh script](https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh)
 and automates almost everything:
 
+* The [letsencrypt.sh](https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh)
+  script expected path is: `[aegir_root]/tools/le/letsencrypt.sh`
+* The `[aegir_root]/tools/le/` directory must be writable by your Aegir
+  system user, typically `aegir`
 * Aegir and its config may live in any non-standard directory
   or in the canonical `/var/aegir`
 * The certificate's name in Aegir (and thus its directory) must be the same
   as the site's name
-* Your `letsencrypt.sh` can be found at `[aegir_root]/tools/le/letsencrypt.sh`
-* The `[aegir_root]/tools/le/` directory must be writable by your Aegir
-  system user, typically `aegir`
 * Avoid renaming SSL-enabled sites; move aliases between site's clones instead
 * Before you rename a site, disable SSL first; then re-enable once it's renamed
 * Many useful details can be found also in the [BOA specific docs](https://github.com/omega8cc/boa/blob/master/docs/SSL.txt)
