@@ -12,6 +12,37 @@ Requirements
 This module works with Apache and Nginx.
 You must have the third-party `letsencrypt.sh` library uploaded (see Usage).
 
+Quick Start
+===========
+
+While it is [included in BOA by default](https://github.com/omega8cc/boa/blob/master/docs/SSL.txt),
+you should be able to add it easily on any Aegir 3.x vanilla system:
+
+1. Upload [hosting_le module](https://github.com/omega8cc/hosting_le) to
+   profiles/hostmaster/modules/contrib/
+
+2. Create expected directory tree, download the script, and enable demo mode:
+
+```
+$ su -s /bin/bash - aegir
+$ mkdir -p /var/aegir/tools/le/.ctrl
+$ touch /var/aegir/tools/le/.ctrl/ssl-demo-mode.pid
+$ cd /var/aegir/tools/le/
+$ wget https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh
+$ chmod 0700 letsencrypt.sh
+```
+
+3. Enable apache_ssl or nginx_ssl on the server node at /hosting/c/server_master
+
+4. Enable "Hosting LE SSL" and "Hosting LE Vhost" at /admin/hosting (in Experimental)
+
+5. Edit a hosted site node to set SSL to "Enabled" (NOT to "Required", until you
+   enable live LE mode) and make sure to fill the "New encryption key" field
+   with the name of your site, e.g. example.com
+
+6. Wait for the Verify task to run. If it's not all-green, check the task log
+   lines which start with `[hosting_le]` prefix for more information.
+
 Usage
 =====
 
