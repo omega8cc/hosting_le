@@ -23,14 +23,14 @@ you should be able to add it easily on any Aegir 3.x vanilla system:
 
 2. Create expected directory tree, download the script, and enable demo mode:
 
-```
-$ su -s /bin/bash - aegir
-$ mkdir -p /var/aegir/tools/le/.ctrl
-$ touch /var/aegir/tools/le/.ctrl/ssl-demo-mode.pid
-$ cd /var/aegir/tools/le/
-$ wget https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh
-$ chmod 0700 letsencrypt.sh
-```
+   ```
+   $ su -s /bin/bash - aegir
+   $ mkdir -p /var/aegir/tools/le/.ctrl
+   $ touch /var/aegir/tools/le/.ctrl/ssl-demo-mode.pid
+   $ cd /var/aegir/tools/le/
+   $ wget https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh
+   $ chmod 0700 letsencrypt.sh
+  ```
 
 3. Enable apache_ssl or nginx_ssl on the server node at /hosting/c/server_master
 
