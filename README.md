@@ -68,8 +68,6 @@ Caveats
 * Let's Encrypt doesn't support wildcard names
 * Let's Encrypt doesn't support IDN names (for now)
 * All site's aliases must have valid DNS names pointing to your server IP address
-* This module will ignore sites with special keywords in their names,
-  or in their redirection target (see Exceptions further below)
 
 Caveats for non-BOA Aegir systems only
 ======================================
@@ -80,6 +78,12 @@ Caveats for non-BOA Aegir systems only
   to be included as SAN names
 * If aliases redirection is enabled, the certificate created will list only
   the redirection target name
+
+Caveats for BOA Aegir systems only
+==================================
+
+* This module will ignore sites with special keywords in their names,
+  or in their redirection target (see Exceptions further below)
 
 Let's Encrypt API limits
 ========================
@@ -128,8 +132,8 @@ demo mode, until the control file is removed.
 
 Read the task log lines which start with `[hosting_le]` prefix for more information.
 
-Exceptions
-==========
+Exceptions for BOA Aegir systems only
+=====================================
 
 The list of keywords to use in the site's main name to have the site ignored
 by this module:
