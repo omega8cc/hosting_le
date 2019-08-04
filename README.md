@@ -10,7 +10,7 @@ Requirements
 ============
 
 This module works with Apache and Nginx.
-You must have the third-party `letsencrypt.sh` library uploaded (see Usage).
+You must have the third-party `dehydrated` library uploaded (see Usage).
 
 Quick Start
 ===========
@@ -28,8 +28,8 @@ you should be able to add it easily on any Aegir 3.x vanilla system:
    $ mkdir -p /var/aegir/tools/le/.ctrl
    $ touch /var/aegir/tools/le/.ctrl/ssl-demo-mode.pid
    $ cd /var/aegir/tools/le/
-   $ wget https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh
-   $ chmod 0700 letsencrypt.sh
+   $ wget https://raw.githubusercontent.com/omega8cc/dehydrated/master/dehydrated
+   $ chmod 0700 dehydrated
 ```
 
 3. Enable apache_ssl or nginx_ssl on the server node at /hosting/c/server_master
@@ -46,11 +46,11 @@ you should be able to add it easily on any Aegir 3.x vanilla system:
 Usage
 =====
 
-This module depends on the [forked letsencrypt.sh script](https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh)
+This module depends on the [forked dehydrated script](https://raw.githubusercontent.com/omega8cc/dehydrated/master/dehydrated)
 and automates almost everything:
 
-* The [letsencrypt.sh](https://raw.githubusercontent.com/omega8cc/letsencrypt.sh/master/letsencrypt.sh)
-  script expected path is: `[aegir_root]/tools/le/letsencrypt.sh`
+* The [dehydrated](https://raw.githubusercontent.com/omega8cc/dehydrated/master/dehydrated)
+  script expected path is: `[aegir_root]/tools/le/dehydrated`
 * The `[aegir_root]/tools/le/` directory must be writable by your Aegir
   system user, typically `aegir`
 * Aegir and its config may live in any non-standard directory
@@ -165,15 +165,15 @@ as Subject Alternative Names (SAN), it is enough to run the Verify task
 on the SSL enabled site. It's planned to automate this procedure using
 different methods (implemented in BOA via automated sites Verify tasks).
 
-To know more about `letsencrypt.sh` usage, please visit:
-https://github.com/lukas2511/letsencrypt.sh
+To know more about `dehydrated` usage, please visit:
+https://github.com/lukas2511/dehydrated
 
 General Notes
 =============
 
 The main important file here is `drush/provision_hosting_le.drush.inc`,
 which allows us to run code after the Verify as the Aegir user. The `www-data`
-group must not be granted access to `letsencrypt.sh` and its base directory
+group must not be granted access to `dehydrated` and its base directory
 `[aegir_root]/tools/le/` for security reasons.
 
 The file `hosting.feature.le.inc` must be present for Aegir to load
