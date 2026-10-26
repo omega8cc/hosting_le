@@ -15,7 +15,7 @@ You must have the third-party `dehydrated` library uploaded (see Usage).
 Quick Start
 ===========
 
-While it is [included in BOA by default](https://github.com/omega8cc/boa/blob/master/docs/SSL.txt),
+While it is [included in BOA by default](https://docs.boa.io/using/ssl/ssl-for-your-sites),
 you should be able to add it easily on any Aegir 3.x vanilla system:
 
 1. Upload [hosting_le module](https://github.com/omega8cc/hosting_le) to
@@ -59,7 +59,7 @@ and automates almost everything:
   as the site's name
 * Avoid renaming SSL-enabled sites; move aliases between site's clones instead
 * Before you rename a site, disable SSL first; then re-enable once it's renamed
-* Many useful details can be found also in the [BOA specific docs](https://github.com/omega8cc/boa/blob/master/docs/SSL.txt)
+* Many useful details can be found also in the [BOA specific docs](https://docs.boa.io/operating/nginx-internals/ssl-operations)
 
 Caveats
 =======
